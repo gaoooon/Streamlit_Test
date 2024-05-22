@@ -16,7 +16,6 @@ def load_data(nrows):
     data[DATE_COLUMN] = pd.to_datetime(data[DATE_COLUMN])
     return data
 
-
 # 텍스트 요소 생성. 사용자에게 데이터가 로드 되고 있음을 알린다.
 data_load_state = st.text('Loading data...')
 
@@ -29,3 +28,17 @@ data_load_state.text('Loading data...done!')
 # 부제목 만들기
 st.subheader('Raw data')
 st.write(data)
+
+# 시각화: 시간에 따른 픽업 수
+st.subheader('Number of pickups by hour')
+
+# 시간에 따른 픽업 수를 계산합니다.
+data['hour'] = data[DATE_COLUMN].dt.hour
+hist_values = np.histogram(data['hour'], bins=24, range=(0,24))[0]
+
+# 히스토그램을 그립니다.
+st.bar_chart(hist_values)
+
+# 시각화: 픽업 위치 지도
+st.subheader('Map of all pickups')
+st.map(data)
